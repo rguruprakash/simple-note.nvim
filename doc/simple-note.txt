@@ -16,9 +16,9 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 
 ```lua
 {
-    'rguruprakash/simple-note',
+    'rguruprakash/simple-note.nvim',
     dependencies = {
-		'nvim-telescope/telescope.nvim',
+        'nvim-telescope/telescope.nvim',
     },
     config = function ()
         require('simple-note').setup({
@@ -30,10 +30,16 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 
 ## Usage
 
-You can use the following commands to interact with your notes:
+### Commands
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
 - `:SimpleNoteCreate`: Creates a new note file and opens it in Neovim.
+
+### Telescope prompt keymaps
+
+- `<c-n>`: Creates new note
+- `<c-x>`: Delete note
+- `<c-r>`: Rename note
 
 ## License
 

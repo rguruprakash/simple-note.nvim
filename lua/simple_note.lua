@@ -16,8 +16,6 @@ M.setup = function(args)
   if not vim.loop.fs_stat(dir) then
     vim.loop.fs_mkdir(dir, 511) -- 511 (0777 in octal) means the owner, group and others can read, write and execute.
     vim.notify("Created " .. dir)
-  else
-    vim.notify("Directory " .. dir .. " already exists")
   end
 end
 
@@ -26,6 +24,7 @@ M.listNotes = function()
   local actions_state = require("telescope.actions.state")
   require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
+    find_command = {'find', '.', '-maxdepth', '1', '-not', '-type', 'd'},
     layout_strategy = "flex",
     prompt_title = "Find Notes (" .. M.config.notes_dir .. ")",
     results_title = "Notes",
@@ -59,20 +58,15 @@ M.listNotes = function()
   })
 end
 
-M.createAndOpenNoteFile = function(extension)
-  local full_path = M.createNoteFile(extension)
+M.createAndOpenNoteFile = function()
+  local full_path = M.createNoteFile()
   vim.cmd("edit " .. full_path)
   vim.notify(full_path .. " has been created")
 end
 
-M.createNoteFile = function(extension)
+M.createNoteFile = function()
   local notes_path = vim.fn.expand(M.config.notes_dir)
-  local filename = os.date("%Y%m%d%H%M%S")
-  if extension and extension ~= "" then
-    filename = filename .. "." .. extension
-  else
-    filename = filename .. ".md"
-  end
+  local filename = os.date("%Y%m%d%H%M%S") .. ".md"
   local full_path = notes_path .. "/" .. filename
   local file = io.open(full_path, "w")
   file:close()
