@@ -12,10 +12,9 @@ M.config = config
 
 M.setup = function(args)
   M.config = vim.tbl_deep_extend("force", M.config, args or {})
-  local lfs = require("lfs")
-  local dir = vim.fn.stdpath("data") .. M.config.notes_dir
-  if not lfs.attributes(dir) then
-    lfs.mkdir(dir)
+  local dir = vim.fn.expand(M.config.notes_dir)
+  if not vim.loop.fs_stat(dir) then
+    vim.loop.fs_mkdir(dir, 511) -- 511 (0777 in octal) means the owner, group and others can read, write and execute.
     vim.notify("Created " .. dir)
   else
     vim.notify("Directory " .. dir .. " already exists")
@@ -28,7 +27,7 @@ M.listNotes = function()
   require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
     layout_strategy = "flex",
-    prompt_title = "Find Notes",
+    prompt_title = "Find Notes (" .. M.config.notes_dir .. ")",
     results_title = "Notes",
     attach_mappings = function(_, map)
       map({ "i", "n" }, "<C-n>", function(prompt_bufnr)
