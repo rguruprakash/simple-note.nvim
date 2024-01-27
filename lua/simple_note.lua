@@ -24,7 +24,7 @@ M.listNotes = function()
   local actions_state = require("telescope.actions.state")
   require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
-    find_command = {'find', '.', '-maxdepth', '1', '-not', '-type', 'd'},
+    find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d" },
     layout_strategy = "flex",
     prompt_title = "Find Notes (" .. M.config.notes_dir .. ")",
     results_title = "Notes",
@@ -38,10 +38,13 @@ M.listNotes = function()
       map({ "i", "n" }, "<C-x>", function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
         local filePath = vim.fn.expand(M.config.notes_dir) .. entry.value
-        os.remove(filePath)
-        vim.notify(filePath .. " has been deleted")
-        actions.close(prompt_bufnr)
-        M.listNotes()
+        local confirm = vim.fn.confirm("Are you sure you want to delete " .. filePath .. "?", "&Yes\n&No")
+        if confirm == 1 then
+          os.remove(filePath)
+          vim.notify(filePath .. " has been deleted")
+          actions.close(prompt_bufnr)
+          M.listNotes()
+        end
       end)
       map({ "i", "n" }, "<C-r>", function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
