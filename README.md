@@ -16,9 +16,9 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 
 ```lua
 {
-    'rguruprakash/simple-note',
+    'rguruprakash/simple-note.nvim',
     dependencies = {
-		'nvim-telescope/telescope.nvim',
+        'nvim-telescope/telescope.nvim',
     },
     config = function ()
         require('simple-note').setup({
