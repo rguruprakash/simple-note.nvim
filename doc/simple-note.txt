@@ -1,8 +1,22 @@
-# Neovim Simple Note Plugin
+*simple-note.txt* For Neovim version 0.8. Last change: 2024 Jan 27 
 
-This is a very minimalist note-taking plugin for Neovim. It provides functionality to create, list, preview, rename, and delete notes.
+==============================================================================
+CONTENTS                                                       *simple-note*
 
-## Features
+1. Introduction               |simple-note-introduction|
+2. Features                   |simple-note-features|
+3. Installation and Configuration |simple-note-installation|
+4. Usage                      |simple-note-usage|
+5. License                    |simple-note-license|
+
+==============================================================================
+INTRODUCTION                                             *simple-note-introduction*
+
+This is a very minimalist note-taking plugin for Neovim. It provides 
+functionality to create, list, preview, rename, and delete notes.
+
+==============================================================================
+FEATURES                                                 *simple-note-features*
 
 - Create a new note file with a unique timestamp as the filename.
 - List all existing notes in a Telescope prompt.
@@ -10,9 +24,10 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 - Delete a selected note file.
 - Rename a selected note file.
 
-## Installation and Configuration
+==============================================================================
+INSTALLATION AND CONFIGURATION                          *simple-note-installation*
 
-**Lazy**
+Use the following configuration in your init.vim or init.lua file:
 
 ```lua
 {
@@ -28,19 +43,25 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 }
 ```
 
-## Usage
+==============================================================================
+USAGE                                                    *simple-note-usage*
 
-### Commands
+Commands:
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
 - `:SimpleNoteCreate`: Creates a new note file and opens it in Neovim.
 
-### Telescope prompt keymaps
+Telescope prompt keymaps:
 
 - `<c-n>`: Creates new note
 - `<c-x>`: Delete note
 - `<c-r>`: Rename note
 
-## License
+==============================================================================
+LICENSE                                                  *simple-note-license*
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) 
+file for details.
+
+==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:
