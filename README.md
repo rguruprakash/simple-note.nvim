@@ -4,7 +4,7 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 
 ## Features
 
-- Create a new note file with a unique timestamp as the filename.
+- Create a new note file with a unique timestamp or the provided filename as argument.
 - List all existing notes in a Telescope prompt.
 - Preview notes in a Telescope prompt.
 - Delete a selected note file.
@@ -33,7 +33,7 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 ### Commands
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
-- `:SimpleNoteCreate`: Creates a new note file and opens it in Neovim.
+- `:SimpleNoteCreate [file_name (optional)]`: Creates a new note file and opens it in Neovim.
 
 ### Telescope prompt keymaps
 

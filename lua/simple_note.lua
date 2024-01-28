@@ -13,6 +13,7 @@ M.config = config
 M.setup = function(args)
   M.config = vim.tbl_deep_extend("force", M.config, args or {})
   local dir = vim.fn.expand(M.config.notes_dir)
+
   if not vim.loop.fs_stat(dir) then
     vim.loop.fs_mkdir(dir, 511) -- 511 (0777 in octal) means the owner, group and others can read, write and execute.
     vim.notify("Created " .. dir)
@@ -24,6 +25,7 @@ M.listNotes = function()
   local actions_state = require("telescope.actions.state")
   local finders = require("telescope.finders")
   local find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d"}
+
   M.picker = require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
     find_command = find_command,
@@ -63,17 +65,30 @@ M.listNotes = function()
   })
 end
 
-M.createAndOpenNoteFile = function()
-  local full_path = M.createNoteFile()
+M.createAndOpenNoteFile = function(opts)
+  local full_path = M.createNoteFile(opts)
+
   vim.cmd("edit " .. full_path)
   vim.notify(full_path .. " has been created")
 end
 
-M.createNoteFile = function()
+M.createNoteFile = function(opts)
   local notes_path = vim.fn.expand(M.config.notes_dir)
-  local filename = os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
-  local full_path = notes_path .. "/" .. filename
-  local file = io.open(full_path, "w")
+  local full_path = notes_path
+
+  if (opts.fargs[1]) then
+    full_path = full_path .. opts.fargs[1]
+  else
+    full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
+  end
+
+  local file = io.open(full_path, "a")
+
+  if file == nil then
+    vim.notify("Unable to create file " .. full_path)
+    return
+  end
+
   file:close()
   return full_path
 end
