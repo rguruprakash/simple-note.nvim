@@ -33,7 +33,7 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
 ### Commands
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
-- `:SimpleNoteCreate [file_name (optional)]`: Creates a new note file and opens it in Neovim.
+- `:SimpleNoteCreate [filename (optional)]`: Creates a new note file and opens it in Neovim.
 
 ### Telescope prompt keymaps
 
