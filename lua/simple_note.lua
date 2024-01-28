@@ -22,28 +22,30 @@ end
 M.listNotes = function()
   local actions = require("telescope.actions")
   local actions_state = require("telescope.actions.state")
-  require("telescope.builtin").find_files({
+  local finders = require("telescope.finders")
+  local find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d"}
+  M.picker = require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
-    find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d" },
+    find_command = find_command,
     layout_strategy = "flex",
     prompt_title = "Find Notes (" .. M.config.notes_dir .. ")",
     results_title = "Notes",
     attach_mappings = function(_, map)
       map({ "i", "n" }, "<C-n>", function(prompt_bufnr)
         local full_path = M.createNoteFile()
+        local picker = actions_state.get_current_picker(prompt_bufnr)
         vim.notify(full_path .. " has been created")
-        actions.close(prompt_bufnr)
-        M.listNotes()
+        picker:refresh(finders.new_oneshot_job(find_command, { cwd = M.config.notes_dir }), { reset_prompt = false })
       end)
       map({ "i", "n" }, "<C-x>", function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
         local filePath = vim.fn.expand(M.config.notes_dir) .. entry.value
+        local picker = actions_state.get_current_picker(prompt_bufnr)
         local confirm = vim.fn.confirm("Are you sure you want to delete " .. filePath .. "?", "&Yes\n&No")
         if confirm == 1 then
           os.remove(filePath)
           vim.notify(filePath .. " has been deleted")
-          actions.close(prompt_bufnr)
-          M.listNotes()
+          picker:refresh(finders.new_oneshot_job(find_command, { cwd = M.config.notes_dir }), { reset_prompt = false })
         end
       end)
       map({ "i", "n" }, "<C-r>", function(prompt_bufnr)
@@ -51,10 +53,10 @@ M.listNotes = function()
         local oldFilePath = vim.fn.expand(M.config.notes_dir) .. entry.value
         local newFileName = vim.fn.input("Enter new filename: ", entry.value)
         local newFilePath = vim.fn.expand(M.config.notes_dir) .. newFileName
+        local picker = actions_state.get_current_picker(prompt_bufnr)
         os.rename(oldFilePath, newFilePath)
         vim.notify(oldFilePath .. " has been renamed to " .. newFilePath)
-        actions.close(prompt_bufnr)
-        M.listNotes()
+        picker:refresh(finders.new_oneshot_job(find_command, { cwd = M.config.notes_dir }), { reset_prompt = false })
       end)
       return true
     end,
@@ -69,7 +71,7 @@ end
 
 M.createNoteFile = function()
   local notes_path = vim.fn.expand(M.config.notes_dir)
-  local filename = os.date("%Y%m%d%H%M%S") .. ".md"
+  local filename = os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
   local full_path = notes_path .. "/" .. filename
   local file = io.open(full_path, "w")
   file:close()
