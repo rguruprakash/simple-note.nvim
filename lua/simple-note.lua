@@ -79,7 +79,7 @@ M.createNoteFile = function(opts)
   local full_path = notes_path
 
   if (opts ~= nil and opts.fargs[1]) then
-    full_path = full_path .. opts.fargs[1]
+    full_path = full_path .. opts.fargs[1] .. ".md"
   else
     full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
   end
