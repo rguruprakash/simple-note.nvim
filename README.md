@@ -2,6 +2,9 @@
 
 This is a very minimalist note-taking plugin for Neovim. It provides functionality to create, list, preview, rename, and delete notes.
 
+#### Motivation
+I've always desired a simple, straightforward note-taking method in vim. I'm only interested in basic functions such as creating, listing, deleting, renaming, and previewing notes. I don't need advanced features like nested notes or linking notes - just plain markdown notes will do. This plugin attempts to do the same with the help of telescope.nvim
+
 ## Features
 
 - Create a new note file with a unique timestamp or the provided filename as argument.
