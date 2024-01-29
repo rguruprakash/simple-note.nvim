@@ -1,4 +1,4 @@
-*simple-note.txt* For Neovim version 0.8. Last change: 2024 Jan 27 
+*simple-note.txt* For Neovim version 0.8. Last change: 2024 Jan 29
 
 ==============================================================================
 CONTENTS                                                       *simple-note*
@@ -12,7 +12,7 @@ CONTENTS                                                       *simple-note*
 ==============================================================================
 INTRODUCTION                                             *simple-note-introduction*
 
-This is a very minimalist note-taking plugin for Neovim. It provides 
+This is a very minimalist note-taking plugin for Neovim. It provides
 functionality to create, list, preview, rename, and delete notes.
 
 ==============================================================================
@@ -37,7 +37,10 @@ Use the following configuration in your init.vim or init.lua file:
     },
     config = function ()
         require('simple-note').setup({
-            notes_dir = '~/my-notes/' -- default: '~/notes/'
+            notes_dir = '~/my-notes/', -- default: '~/notes/'
+            telescope_new = '<C-n>',
+            telescope_delete = '<C-x>',
+            telescope_rename = '<C-r>',
         })
     end
 }
@@ -53,14 +56,15 @@ Commands:
 
 Telescope prompt keymaps:
 
-- `<c-n>`: Creates new note
+- `<c-n>`: Creates new note (using the current line in the search prompt if
+  any)
 - `<c-x>`: Delete note
 - `<c-r>`: Rename note
 
 ==============================================================================
 LICENSE                                                  *simple-note-license*
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE)
 file for details.
 
 ==============================================================================
