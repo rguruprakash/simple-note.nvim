@@ -37,8 +37,8 @@ M.listNotes = function()
       map({ "i", "n" }, "<C-n>", function(prompt_bufnr)
         M.createNoteFile({})
         local picker = actions_state.get_current_picker(prompt_bufnr)
-
-        picker:refresh(finders.new_oneshot_job(find_command, { cwd = M.config.notes_dir }), { reset_prompt = false })
+        actions.close(prompt_bufnr) -- Close the previewer
+        M.listNotes() 
       end)
       map({ "i", "n" }, "<C-x>", function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
@@ -49,7 +49,8 @@ M.listNotes = function()
         if confirm == 1 then
           os.remove(filePath)
           vim.notify(filePath .. " has been deleted")
-          picker:refresh(finders.new_oneshot_job(find_command, { cwd = M.config.notes_dir }), { reset_prompt = false })
+          actions.close(prompt_bufnr) -- Close the previewer
+          M.listNotes() 
         end
       end)
       map({ "i", "n" }, "<C-r>", function(prompt_bufnr)
@@ -60,7 +61,8 @@ M.listNotes = function()
         local picker = actions_state.get_current_picker(prompt_bufnr)
         os.rename(oldFilePath, newFilePath)
         vim.notify(oldFilePath .. " has been renamed to " .. newFilePath)
-        picker:refresh(finders.new_oneshot_job(find_command, { cwd = M.config.notes_dir }), { reset_prompt = false })
+        actions.close(prompt_bufnr) -- Close the previewer
+        M.listNotes()
       end)
       return true
     end,
@@ -85,7 +87,6 @@ M.createNoteFile = function(opts)
   local full_path = notes_path
 
   if (opts ~= nil and opts.fargs ~= nil and opts.fargs[1]) then
-
     full_path = full_path .. opts.fargs[1] .. ".md"
   else
     full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
