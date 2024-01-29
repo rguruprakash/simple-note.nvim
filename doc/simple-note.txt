@@ -37,10 +37,10 @@ Use the following configuration in your init.vim or init.lua file:
     },
     config = function ()
         require('simple-note').setup({
-            notes_dir = '~/my-notes/' -- default: '~/notes/'
-            telescope_new = "<C-n>",
-            telescope_delete = "<C-x>",
-            telescope_rename = "<C-r>",
+            notes_dir = '~/my-notes/', -- default: '~/notes/'
+            telescope_new = '<C-n>',
+            telescope_delete = '<C-x>',
+            telescope_rename = '<C-r>',
         })
     end
 }
