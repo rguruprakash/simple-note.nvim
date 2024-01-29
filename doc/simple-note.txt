@@ -1,4 +1,4 @@
-*simple-note.txt* For Neovim version 0.8. Last change: 2024 Jan 29
+*simple-note.txt* For Neovim version 0.8. Last change: 2024 Jan 30
 
 ==============================================================================
 CONTENTS                                                       *simple-note*
@@ -37,7 +37,8 @@ Use the following configuration in your init.vim or init.lua file:
     },
     config = function ()
         require('simple-note').setup({
-            notes_dir = '~/my-notes/', -- default: '~/notes/'
+            -- configuration defaults
+            notes_dir = '~/notes/',
             telescope_new = '<C-n>',
             telescope_delete = '<C-x>',
             telescope_rename = '<C-r>',

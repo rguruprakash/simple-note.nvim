@@ -22,7 +22,8 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
     },
     config = function ()
         require('simple-note').setup({
-            notes_dir = '~/my-notes/', -- default: '~/notes/'
+            -- configuration defaults
+            notes_dir = '~/notes/',
             telescope_new = '<C-n>',
             telescope_delete = '<C-x>',
             telescope_rename = '<C-r>',
