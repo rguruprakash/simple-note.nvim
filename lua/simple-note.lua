@@ -2,6 +2,9 @@
 ---@field notes_dir string path to the directory where the notes should be created
 local config = {
   notes_dir = "~/notes/",
+  telescope_new = "<C-n>",
+  telescope_delete = "<C-x>",
+  telescope_rename = "<C-r>",
 }
 
 ---@class MyModule
@@ -25,7 +28,7 @@ M.listNotes = function()
   local actions = require("telescope.actions")
   local actions_state = require("telescope.actions.state")
   local finders = require("telescope.finders")
-  local find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d"}
+  local find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d" }
 
   M.picker = require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
@@ -34,13 +37,15 @@ M.listNotes = function()
     prompt_title = "Find Notes (" .. M.config.notes_dir .. ")",
     results_title = "Notes",
     attach_mappings = function(_, map)
-      map({ "i", "n" }, "<C-n>", function(prompt_bufnr)
-        M.createNoteFile({})
+      map({ "i", "n" }, M.config.telescope_new, function(prompt_bufnr)
+        local current_line = actions_state.get_current_line()
+        local opts = current_line ~= "" and { fargs = { current_line } } or {}
+        M.createNoteFile(opts)
         local picker = actions_state.get_current_picker(prompt_bufnr)
         actions.close(prompt_bufnr) -- Close the previewer
-        M.listNotes() 
+        M.listNotes()
       end)
-      map({ "i", "n" }, "<C-x>", function(prompt_bufnr)
+      map({ "i", "n" }, M.config.telescope_delete, function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
         local filePath = vim.fn.expand(M.config.notes_dir) .. entry.value
         local picker = actions_state.get_current_picker(prompt_bufnr)
@@ -50,10 +55,10 @@ M.listNotes = function()
           os.remove(filePath)
           vim.notify(filePath .. " has been deleted")
           actions.close(prompt_bufnr) -- Close the previewer
-          M.listNotes() 
+          M.listNotes()
         end
       end)
-      map({ "i", "n" }, "<C-r>", function(prompt_bufnr)
+      map({ "i", "n" }, M.config.telescope_rename, function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
         local oldFilePath = vim.fn.expand(M.config.notes_dir) .. entry.value
         local newFileName = vim.fn.input("Enter new filename: ", entry.value)
@@ -73,20 +78,20 @@ end
 M.createAndOpenNoteFile = function(opts)
   local full_path = M.createNoteFile(opts)
 
-  if (full_path == nil) then
+  if full_path == nil then
     return
   end
 
   vim.cmd("edit " .. full_path)
 end
 
----@param opts table 
+---@param opts table
 ---@return string|nil full_path
 M.createNoteFile = function(opts)
   local notes_path = vim.fn.expand(M.config.notes_dir)
   local full_path = notes_path
 
-  if (opts ~= nil and opts.fargs ~= nil and opts.fargs[1]) then
+  if opts ~= nil and opts.fargs ~= nil and opts.fargs[1] then
     full_path = full_path .. opts.fargs[1] .. ".md"
   else
     full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
