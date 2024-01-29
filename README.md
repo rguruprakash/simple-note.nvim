@@ -21,7 +21,7 @@ This is a very minimalist note-taking plugin for Neovim. It provides functionali
         'nvim-telescope/telescope.nvim',
     },
     config = function ()
-        require('simple-note').setup({
+        require('simple_note').setup({
             notes_dir = '~/my-notes/' -- default: '~/notes/'
         })
     end
