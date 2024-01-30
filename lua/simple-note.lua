@@ -97,6 +97,11 @@ M.createNoteFile = function(opts)
     full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
   end
 
+  if vim.fn.filereadable(full_path) == 1 then
+    vim.notify(full_path .. " already exists")
+    return nil
+  end
+
   local file = io.open(full_path, "a")
 
   if file == nil then
