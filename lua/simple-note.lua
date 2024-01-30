@@ -98,8 +98,7 @@ M.createNoteFile = function(opts)
   end
 
   if vim.fn.filereadable(full_path) == 1 then
-    vim.notify(full_path .. " already exists")
-    return nil
+    return full_path
   end
 
   local file = io.open(full_path, "a")
