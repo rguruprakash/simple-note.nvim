@@ -92,7 +92,13 @@ M.createNoteFile = function(opts)
   local full_path = notes_path
 
   if opts ~= nil and opts.fargs ~= nil and opts.fargs[1] then
-    full_path = full_path .. opts.fargs[1] .. ".md"
+    local filename = opts.fargs[1]
+    -- Check if filename has an extension
+    if filename:match("%.([^%.]+)$") then
+      full_path = full_path .. filename
+    else
+      full_path = full_path .. filename .. ".md"
+    end
   else
     full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
   end
