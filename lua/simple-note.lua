@@ -28,11 +28,16 @@ M.listNotes = function()
   local actions = require("telescope.actions")
   local actions_state = require("telescope.actions.state")
   local finders = require("telescope.finders")
-  local find_command = { "find", ".", "-maxdepth", "1", "-not", "-type", "d" }
 
   M.picker = require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
-    find_command = find_command,
+    find_command = function()
+      if vim.fn.has "win32" == 1 then
+        return { "cmd", "/c", "dir", "/b", "/a:-d" }
+      else
+        return { "find", ".", "-maxdepth", "1", "-not", "-type", "d" }
+      end
+    end,
     layout_strategy = "flex",
     prompt_title = "Find Notes (" .. M.config.notes_dir .. ")",
     results_title = "Notes",
