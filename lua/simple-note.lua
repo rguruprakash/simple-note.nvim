@@ -1,7 +1,9 @@
 ---@class Config
 ---@field notes_dir string path to the directory where the notes should be created
+---@field notes_name_template string template for generating new note names. it supports any tag from the os.date function.
 local config = {
   notes_dir = "~/notes/",
+  notes_name_template = "%A_%B_%d_%Y_%I_%M_%S_%p",
   telescope_new = "<C-n>",
   telescope_delete = "<C-x>",
   telescope_rename = "<C-r>",
@@ -105,7 +107,7 @@ M.createNoteFile = function(opts)
       full_path = full_path .. filename .. ".md"
     end
   else
-    full_path = full_path .. os.date("%A_%B_%d_%Y_%I_%M_%S_%p") .. ".md"
+    full_path = full_path .. os.date(M.config.notes_name_template) .. ".md"
   end
 
   if vim.fn.filereadable(full_path) == 1 then
