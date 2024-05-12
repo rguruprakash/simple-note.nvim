@@ -33,16 +33,22 @@ Use the following configuration in your init.vim or init.lua file:
 {
     'rguruprakash/simple-note.nvim',
     dependencies = {
+        'nvim-lua/plenary.nvim',
         'nvim-telescope/telescope.nvim',
     },
     config = function ()
         require('simple-note').setup({
-            -- configuration defaults
-            notes_dir = '~/notes/',
-            notes_name_template = "%A_%B_%d_%Y_%I_%M_%S_%p",
-            telescope_new = '<C-n>',
-            telescope_delete = '<C-x>',
-            telescope_rename = '<C-r>',
+            -- Optional Configurations
+            notes_dir = '~/notes/', -- default: '~/notes/'
+            notes_directories = { -- default: {}
+                '~/notes/',
+                '~/work/',
+                '~/personal/'
+            },
+            telescope_new = '<C-n>', -- default: <C-n> 
+            telescope_delete = '<C-x>', -- default: <C-x>
+            telescope_rename = '<C-r>', -- default: <C-r>
+            telescope_change_directory = '<C-c>'  -- default: <C-c>
         })
     end
 }
@@ -55,6 +61,7 @@ Commands:
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
 - `:SimpleNoteCreate [filename (optional)]`: Creates a new note file and opens it in Neovim.
+- `:SimpleNotePickDirectory`: Pick notes directory
 
 Telescope prompt keymaps:
 
@@ -62,6 +69,7 @@ Telescope prompt keymaps:
   any)
 - `<c-x>`: Delete note
 - `<c-r>`: Rename note
+- `<c-c>`: Change notes directory
 
 ==============================================================================
 LICENSE                                                  *simple-note-license*

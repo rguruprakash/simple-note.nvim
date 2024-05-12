@@ -1,12 +1,22 @@
+local createNotesDir = function(notes_dir)
+  local dir = tostring(vim.fn.expand(notes_dir))
+  if not vim.loop.fs_stat(dir) then
+    vim.loop.fs_mkdir(dir, 511) -- 511 (0777 in octal) means the owner, group and others can read, write and execute.
+    vim.notify("Created " .. dir)
+  end
+end
+
 ---@class Config
 ---@field notes_dir string path to the directory where the notes should be created
 ---@field notes_name_template string template for generating new note names. it supports any tag from the os.date function.
 local config = {
   notes_dir = "~/notes/",
+  notes_directories = {},
   notes_name_template = "%A_%B_%d_%Y_%I_%M_%S_%p",
   telescope_new = "<C-n>",
   telescope_delete = "<C-x>",
   telescope_rename = "<C-r>",
+  telescope_change_directory = "<C-c>",
 }
 
 ---@class MyModule
@@ -18,18 +28,12 @@ M.config = config
 ---@param args table
 M.setup = function(args)
   M.config = vim.tbl_deep_extend("force", M.config, args or {})
-  local dir = tostring(vim.fn.expand(M.config.notes_dir))
-
-  if not vim.loop.fs_stat(dir) then
-    vim.loop.fs_mkdir(dir, 511) -- 511 (0777 in octal) means the owner, group and others can read, write and execute.
-    vim.notify("Created " .. dir)
-  end
+  createNotesDir(M.config.notes_dir)
 end
 
 M.listNotes = function()
   local actions = require("telescope.actions")
   local actions_state = require("telescope.actions.state")
-  local finders = require("telescope.finders")
 
   M.picker = require("telescope.builtin").find_files({
     cwd = M.config.notes_dir,
@@ -51,7 +55,7 @@ M.listNotes = function()
         local picker = actions_state.get_current_picker(prompt_bufnr)
         actions.close(prompt_bufnr) -- Close the previewer
         M.listNotes()
-      end)
+      end, { desc = "Create new note" })
       map({ "i", "n" }, M.config.telescope_delete, function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
         local filePath = vim.fn.expand(M.config.notes_dir) .. entry.value
@@ -64,7 +68,7 @@ M.listNotes = function()
           actions.close(prompt_bufnr) -- Close the previewer
           M.listNotes()
         end
-      end)
+      end, { desc = "Delete note" })
       map({ "i", "n" }, M.config.telescope_rename, function(prompt_bufnr)
         local entry = actions_state.get_selected_entry(prompt_bufnr)
         local oldFilePath = vim.fn.expand(M.config.notes_dir) .. entry.value
@@ -75,10 +79,26 @@ M.listNotes = function()
         vim.notify(oldFilePath .. " has been renamed to " .. newFilePath)
         actions.close(prompt_bufnr) -- Close the previewer
         M.listNotes()
-      end)
+      end, { desc = "Rename note" })
+      map({ "i", "n" }, M.config.telescope_change_directory, function(prompt_bufnr)
+        actions.close(prompt_bufnr) -- Close the previewer
+        M.pickNotesDirectory()
+      end, { desc = "Change notes directory" })
       return true
     end,
   })
+end
+
+M.pickNotesDirectory = function()
+  vim.ui.select(M.config.notes_directories, {
+    prompt = "Select Notes Directory",
+  }, function(selected)
+    if selected ~= nil then
+      M.config.notes_dir = selected
+      createNotesDir(M.config.notes_dir)
+    end
+    M.listNotes()
+  end)
 end
 
 ---@param opts table

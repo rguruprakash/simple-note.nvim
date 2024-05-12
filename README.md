@@ -21,15 +21,22 @@ I've always desired a simple, straightforward note-taking method in vim. I'm onl
 {
     'rguruprakash/simple-note.nvim',
     dependencies = {
+        'nvim-lua/plenary.nvim',
         'nvim-telescope/telescope.nvim',
     },
     config = function ()
         require('simple-note').setup({
-            -- configuration defaults
-            notes_dir = '~/notes/',
-            telescope_new = '<C-n>',
-            telescope_delete = '<C-x>',
-            telescope_rename = '<C-r>',
+            -- Optional Configurations
+            notes_dir = '~/notes/', -- default: '~/notes/'
+            notes_directories = { -- default: {}
+                '~/notes/',
+                '~/work/',
+                '~/personal/'
+            },
+            telescope_new = '<C-n>', -- default: <C-n> 
+            telescope_delete = '<C-x>', -- default: <C-x>
+            telescope_rename = '<C-r>', -- default: <C-r>
+            telescope_change_directory = '<C-c>'  -- default: <C-c>
         })
     end
 }
@@ -41,12 +48,14 @@ I've always desired a simple, straightforward note-taking method in vim. I'm onl
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
 - `:SimpleNoteCreate [filename (optional)]`: Creates a new note file and opens it in Neovim.
+- `:SimpleNotePickDirectory`: Pick notes directory
 
 ### Telescope default prompt keymaps
 
 - `<c-n>`: Creates new note (using the current line in the search prompt if any)
 - `<c-x>`: Delete note
 - `<c-r>`: Rename note
+- `<c-c>`: Change notes directory
 
 ## License
 
