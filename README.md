@@ -48,7 +48,7 @@ I've always desired a simple, straightforward note-taking method in vim. I'm onl
 
 - `:SimpleNoteList`: Lists all existing notes in a Telescope prompt.
 - `:SimpleNoteCreate [filename (optional)]`: Creates a new note file and opens it in Neovim.
-- `:SimpleNotePickDirectory`: Pick notes directory
+- `:SimpleNotePickDirectory`: Pick notes directory.
 
 ### Telescope default prompt keymaps
 
